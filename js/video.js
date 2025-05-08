@@ -7,14 +7,14 @@ function getTimeString(time){
     return`${hour} hour ${minute} minute ${remainingSecond} second ago`;
 }
 
-// const removeActiveClass = () =>{
-//     const buttons = document.getElementsByClassName('category-btn');
-//     console.log(buttons);
+const removeActiveClass = () =>{
+    const buttons = document.getElementsByClassName('category-btn');
+    console.log(buttons);
 
-//     for(let btn of buttons){
-//      btn.classList.remove("active")
-//     }
-// }
+    for(let btn of buttons){
+     btn.classList.remove("active")
+    }
+}
 
 const loadCategories = () => {
     fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
@@ -37,7 +37,7 @@ const loadVideo = () => {
     .then((data) =>  {
 
         // active button
-        // removeActiveClass();
+        removeActiveClass();
 
 
         const activeBtn = document.getElementById(`btn-${id}`);
@@ -46,6 +46,26 @@ const loadVideo = () => {
         displayVideos(data.category);
     })
     .catch((error) => console.log(error));
+ }
+
+ const loadDetails = async(videoId) => {
+    console.log(videoId);
+    const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+    const res = await fetch(uri);
+    const data = await res.json();
+    displayDetails(data.video)
+
+ };
+
+ const displayDetails = (video) =>{
+    console.log(video);
+    const detailsContainer = document.getElementById("modal-content")
+    detailsContainer.innerHTML=`
+    <img src=${video.thumbnail} />
+    <p>${video.description}</p>
+    `
+    document.getElementById("showModal").click();
+
  }
 
 const displayVideos = (videos) =>{
@@ -93,7 +113,7 @@ const displayVideos = (videos) =>{
    <p class="text-gray-400">${video.authors[0].profile_name}</p>
   ${video.authors[0].verified == true ? '<img class="w-5" src="https://img.icons8.com/?size=96&id=63760&format=png"/>': ""}
    </div>
-   <p></p>
+   <p> <button onclick="loadDetails('${video.video_id}')"class="btn btn-sm btn-error">details</button></p>
    </div>
    
   </div>;
