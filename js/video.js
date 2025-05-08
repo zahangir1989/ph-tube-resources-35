@@ -23,8 +23,8 @@ const loadCategories = () => {
         .catch((error) => console.log(error));
 };
 
-const loadVideo = () => {
-    fetch(" https://openapi.programming-hero.com/api/phero-tube/videos")
+const loadVideo = (searchText="") => {
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${seachText}`)
     .then((res) => res.json())
     .then((data) =>displayVideos(data.videos))
     .catch((error) => console.log(error));
@@ -146,6 +146,10 @@ const displayCategories = (categories) => {
         categoryContainer.append(buttonContainer);
     });
 };
+
+document.getElementById("search-input").addEventListener("keyup", (e) => {
+    loadVideo(e.target.value);
+});
 
 loadCategories();
 loadVideo();
